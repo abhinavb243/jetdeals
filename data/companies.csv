@@ -1,0 +1,4 @@
+name,ticker,cik,hq_city,hq_airports,sector,watch,owner_aliases
+# Add the public companies you want to track. hq_airports = ICAO codes near HQ (see app/airports.py).
+# owner_aliases = names on the FAA registry for that company's aircraft (often an LLC), separated by |
+# cik = SEC Central Index Key (10 digits, leading zeros optional), used for EDGAR filings.

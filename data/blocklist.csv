@@ -1,0 +1,5 @@
+# Privacy block list. One tail number (e.g. N123AB) or ICAO24 hex (e.g. a1b2c3) per line.
+# Add FAA LADD entries and any owner opt-out requests here. Blocked aircraft are
+# dropped at ingest and purged from the database on every ingest run.
+identifier
+N0BLK1

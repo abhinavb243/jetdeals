@@ -1,0 +1,7 @@
+.venv/
+.env
+data/jetdeal.db
+data/ReleasableAircraft/
+__pycache__/
+.pytest_cache/
+.DS_Store

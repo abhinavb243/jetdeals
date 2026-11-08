@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JetDeal Signals</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header>
+  <div class="brand">JetDeal <span>Signals</span></div>
+  <nav id="tabs">
+    <button data-tab="signals" class="active">Signals</button>
+    <button data-tab="timeline">Timeline</button>
+    <button data-tab="companies">Watchlist</button>
+    <button data-tab="flights">Flights</button>
+    <button data-tab="deals">Deals</button>
+    <button data-tab="sources">Sources &amp; privacy</button>
+  </nav>
+</header>
+
+<div class="disclaimer">
+  <strong>Informational only. Not investment advice.</strong>
+  These signals are inferred from public flight data and filings. They do not say who was on a plane or why it flew.
+  Do your own research and follow the rules that apply to you, including insider-trading law.
+  <span id="sample-badge" class="badge sample" hidden>Contains SAMPLE (fictional) data</span>
+</div>
+
+<main>
+  <section id="signals" class="tab active">
+    <div id="kpis" class="kpis"></div>
+    <h2>Open alerts</h2>
+    <p class="hint">A company's jets fly to another company's HQ city more often than usual, and no deal has been announced yet.</p>
+    <div id="alerts" class="cards"></div>
+    <h2>All signals</h2>
+    <div class="filters">
+      <label>Status <select id="f-status"><option value="">All</option><option>open</option><option>corroborated</option><option>confirmed</option></select></label>
+      <label>Min score <input id="f-score" type="number" value="20" min="0" max="100" step="5"></label>
+      <label><input id="f-watch" type="checkbox"> Watchlist only</label>
+    </div>
+    <div class="table-wrap"><table id="signals-table"></table></div>
+  </section>
+
+  <section id="timeline" class="tab">
+    <div class="filters">
+      <label>Signal <select id="tl-pair"></select></label>
+    </div>
+    <div id="tl-summary"></div>
+    <div id="tl-chart" class="chart"></div>
+    <div class="table-wrap"><table id="tl-table"></table></div>
+  </section>
+
+  <section id="companies" class="tab">
+    <p class="hint">Star a company to add it to the watchlist. Watched companies get +10 on signals they are part of.
+      Add your own companies in <code>data/companies.csv</code>.</p>
+    <div class="table-wrap"><table id="companies-table"></table></div>
+    <h2>Tracked aircraft</h2>
+    <p class="hint">Only aircraft registered to organizations and matched to a company in the list are tracked.</p>
+    <div class="table-wrap"><table id="aircraft-table"></table></div>
+  </section>
+
+  <section id="flights" class="tab"><div class="table-wrap"><table id="flights-table"></table></div></section>
+  <section id="deals" class="tab"><div class="table-wrap"><table id="deals-table"></table></div></section>
+
+  <section id="sources" class="tab">
+    <div id="source-status" class="cards"></div>
+    <div class="actions">
+      <button id="btn-ingest" class="primary">Refresh data</button>
+      <button id="btn-sample">Reload sample data</button>
+      <span id="ingest-msg"></span>
+    </div>
+    <h2>Privacy rules applied</h2>
+    <ul class="rules">
+      <li>Aircraft registered to <b>individuals or co-owners are dropped</b>. Only corporations, LLCs and partnerships are kept.</li>
+      <li>Only aircraft that match a company in your list are tracked. Unmatched LLCs (which may be personal holding companies) are ignored.</li>
+      <li>Tail numbers and ICAO addresses in <code>data/blocklist.csv</code> are dropped at ingest and purged on every run.
+        Add <b>FAA LADD</b> entries and owner opt-out requests there.</li>
+      <li><b>PIA</b> aircraft broadcast temporary addresses that are not in the FAA registry. Flights are requested only for registry addresses, so PIA aircraft are never linked to an owner.</li>
+      <li>Data comes only from public sources: OpenSky Network, the FAA Releasable Aircraft database, and SEC EDGAR.</li>
+    </ul>
+    <h2>How the score works (0–100)</h2>
+    <ul class="rules">
+      <li><b>Frequency (40)</b>: landings in the host's HQ city in the last 30 days, above the visitor's normal rate.</li>
+      <li><b>Novelty (25)</b>: how unusual the trips are compared to the 180 days before.</li>
+      <li><b>Recency (15)</b>: how recent the last landing is.</li>
+      <li><b>Day trips (10)</b>: share of stays under 12 hours, which is typical for meetings.</li>
+      <li><b>Watchlist (10)</b>: the visitor or the host is on your watchlist.</li>
+      <li>Leisure airports (Aspen, Sun Valley, Palm Beach) are multiplied by 0.3.</li>
+      <li><b>Confirmed</b> = a deal between both companies followed the visits (backtest shows how many days of warning the score gave).
+        <b>Corroborated</b> = a single-company filing or rumor followed. <b>Open</b> = nothing yet.</li>
+    </ul>
+  </section>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>
